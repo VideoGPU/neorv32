@@ -99,10 +99,10 @@ begin
     rstn_i      => rstn_i,                       -- global reset, low-active, async
     -- GPIO (available if IO_GPIO_NUM > 0) --
     gpio_o      => con_gpio_o,                   -- parallel output
-    gpio_i      => (others => '0'),              -- parallel input
+    gpio_i      => std_ulogic_vector'(others => '0'),              -- parallel input
     -- primary UART0 (available if IO_UART0_EN = true) --
     uart0_txd_o => uart_txd_o,                   -- UART0 send data
-    uart0_rxd_i => uart_rxd_i,                   -- UART0 receive data
+    uart0_rxd_i => std_ulogic'(uart_rxd_i),                   -- UART0 receive data
     -- PWM (available if IO_PWM_NUM_CH > 0) --
     pwm_o       => con_pwm_o                     -- pwm channels
   );
