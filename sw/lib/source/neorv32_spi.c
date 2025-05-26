@@ -42,7 +42,25 @@
 
 #include "neorv32.h"
 #include "neorv32_spi.h"
+#include "legacy.h"
 
+#define PRINT_TEXT(...) neorv32_uart0_puts(__VA_ARGS__)
+#define PRINT_PUTC(a) neorv32_uart0_putc(a)
+#define PRINT_XNUM(a) print_hex_word(a)
+
+//static void print_hex_word(uint32_t num) {
+//
+//  static const char hex_symbols[16] = "0123456789abcdef";
+//
+//  PRINT_PUTC('0');
+//  PRINT_PUTC('x');
+//
+//  int i;
+//  for (i=28; i>=0; i-=4) {
+//    PRINT_PUTC(hex_symbols[(num >> i) & 0xf]);
+//  }
+//
+//}
 
 /**********************************************************************//**
  * Check if SPI unit was synthesized.
@@ -132,7 +150,6 @@ int neorv32_spi_get_fifo_depth(void) {
   return (int)(1 << tmp);
 }
 
-
 /**********************************************************************//**
  * Activate single SPI chip select signal.
  *
@@ -143,9 +160,15 @@ int neorv32_spi_get_fifo_depth(void) {
 void neorv32_spi_cs_en(int cs) {
 
   uint32_t tmp = NEORV32_SPI->CTRL;
+  //PRINT_TEXT("Enter: neorv32_spi_cs_en NEORV32_SPI->CTRL = \n");
+  //PRINT_XNUM(tmp);
+  //PRINT_TEXT("\n");
   tmp &= ~(0xf << SPI_CTRL_CS_SEL0); // clear old configuration
   tmp |= (1 << SPI_CTRL_CS_EN) | ((cs & 7) << SPI_CTRL_CS_SEL0); // set new configuration
   NEORV32_SPI->CTRL = tmp;
+  //PRINT_TEXT("Exit: neorv32_spi_cs_en NEORV32_SPI->CTRL \n");
+  //PRINT_XNUM(tmp);
+  //PRINT_TEXT("\n");
 }
 
 
@@ -155,8 +178,9 @@ void neorv32_spi_cs_en(int cs) {
  * @note The SPI chip select output lines are HIGH when deactivated.
  **************************************************************************/
 void neorv32_spi_cs_dis(void) {
-
-  NEORV32_SPI->CTRL &= ~(1 << SPI_CTRL_CS_EN);
+	//PRINT_TEXT("Enter: neorv32_spi_cs_dis \n");
+	NEORV32_SPI->CTRL &= ~(1 << SPI_CTRL_CS_EN);
+	//PRINT_TEXT("Exit: neorv32_spi_cs_dis \n");
 }
 
 

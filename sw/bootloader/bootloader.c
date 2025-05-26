@@ -546,6 +546,9 @@ void __attribute__((interrupt("machine"))) bootloader_trap_handler(void) {
  **************************************************************************/
 void get_exe(int src) {
 
+//	volatile a=1;
+//	while (a); // wait for debugger to attach
+
   getting_exe = 1; // to inform trap handler we were trying to get an executable
 
   // flash image base address
@@ -754,9 +757,11 @@ void print_hex_word(uint32_t num) {
 void spi_flash_wakeup(void) {
 
 #if (SPI_EN != 0)
+  //PRINT_TEXT("Enter: spi_flash_wakeup \n");
   neorv32_spi_cs_en(SPI_FLASH_CS);
   neorv32_spi_trans(SPI_FLASH_CMD_WAKE);
   neorv32_spi_cs_dis();
+  //PRINT_TEXT("Exit: spi_flash_wakeup \n");
 #endif
 }
 
@@ -769,21 +774,24 @@ void spi_flash_wakeup(void) {
 int spi_flash_check(void) {
 
 #if (SPI_EN != 0)
+  //PRINT_TEXT("Enter: spi_flash_check \n");
   // The flash may have been set to sleep prior to reaching this point. Make sure it's alive
   spi_flash_wakeup();
 
   // set WEL
   spi_flash_write_enable();
   if ((spi_flash_read_status() & (1 << FLASH_SREG_WEL)) == 0) { // fail if WEL is cleared
+	PRINT_TEXT("ERROR: spi_flash_check,WEL is cleared \n");
     return -1;
   }
 
   // clear WEL
   spi_flash_write_disable();
   if ((spi_flash_read_status() & (1 << FLASH_SREG_WEL)) != 0) { // fail if WEL is set
+	PRINT_TEXT("ERROR: spi_flash_check,WEL is set \n");
     return -1;
   }
-
+  //PRINT_TEXT("Exit: spi_flash_check \n");
   return 0;
 #else
   return -1;
@@ -893,15 +901,18 @@ void spi_flash_erase_sector(uint32_t addr) {
 }
 
 
+
 /**********************************************************************//**
  * Enable flash write access.
  **************************************************************************/
 void spi_flash_write_enable(void) {
 
 #if (SPI_EN != 0)
+  //PRINT_TEXT("Enter: spi_flash_write_enable \n");
   neorv32_spi_cs_en(SPI_FLASH_CS);
   neorv32_spi_trans(SPI_FLASH_CMD_WRITE_ENABLE);
   neorv32_spi_cs_dis();
+  //PRINT_TEXT("Exit: spi_flash_write_enable \n");
 #endif
 }
 
@@ -912,9 +923,11 @@ void spi_flash_write_enable(void) {
 void spi_flash_write_disable(void) {
 
 #if (SPI_EN != 0)
+  //PRINT_TEXT("Enter: spi_flash_write_disable \n");
   neorv32_spi_cs_en(SPI_FLASH_CS);
   neorv32_spi_trans(SPI_FLASH_CMD_WRITE_DISABLE);
   neorv32_spi_cs_dis();
+  //PRINT_TEXT("Exit: spi_flash_write_disable \n");
 #endif
 }
 
@@ -927,12 +940,12 @@ void spi_flash_write_disable(void) {
 uint8_t spi_flash_read_status(void) {
 
 #if (SPI_EN != 0)
+  //PRINT_TEXT("Enter: spi_flash_read_status \n");
   neorv32_spi_cs_en(SPI_FLASH_CS);
-
   neorv32_spi_trans(SPI_FLASH_CMD_READ_STATUS);
   uint8_t res = neorv32_spi_trans(0);
-
   neorv32_spi_cs_dis();
+  //PRINT_TEXT("Exit: spi_flash_read_status \n");
 
   return res;
 #else

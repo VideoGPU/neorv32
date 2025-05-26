@@ -160,7 +160,7 @@ all:     $(APP_ASM) $(APP_EXE) $(APP_IMG) install hex bin
 # Use different base address and length for instruction memory/"rom" (BOOTROM instead of IMEM)
 # Also define "make_bootloader" symbol for crt0.S, add debug symbols and use link-time optimization
 target bootloader: CC_OPTS += -Wl,--defsym=make_bootloader=1 -Dmake_bootloader -g -flto
-target bl_image:   CC_OPTS += -Wl,--defsym=make_bootloader=1 -Dmake_bootloader -g -flto
+target bl_image:   CC_OPTS += -Wl,--defsym=make_bootloader=1 -Dmake_bootloader -g -O0 -flto
 
 
 # -----------------------------------------------------------------------------
