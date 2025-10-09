@@ -1,8 +1,8 @@
 # Default NEORV32 bootloader makefile
 
 # minimal RISC-V ISA
-MARCH = rv32e_zicsr_zifencei
-MABI = ilp32e
+MARCH = rv32imc_zicsr_zifencei
+MABI = ilp32
 
 # optimize for minimal size
 EFFORT = -Os

@@ -125,6 +125,10 @@ int system_exe_load(int (*dev_init)(void), int (*stream_get)(uint32_t* rdata)) {
   // no executable available yet
   g_exe_size = 0;
 
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 5 passed \n");
+  }
+
   // initialize stream device
   if (dev_init()) {
     uart_puts("\aERROR_DEVICE\n");

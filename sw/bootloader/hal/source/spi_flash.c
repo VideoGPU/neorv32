@@ -105,13 +105,25 @@ static void spi_flash_send_addr(void) {
  **************************************************************************/
 int spi_flash_setup(void) {
 
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 6 passed \n");
+  }
+
   // abort if SPI module not available
   if (!neorv32_spi_available()) {
     return 1;
   }
 
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 7 passed \n");
+  }
+
   // setup SPI, clock mode 0
   neorv32_spi_setup(SPI_FLASH_CLK_PRSC, SPI_FLASH_CLK_DIV, 0, 0);
+
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 8 passed \n");
+  }
 
   // set base address
   g_flash_addr = (uint32_t)SPI_FLASH_BASE_ADDR;
@@ -119,16 +131,28 @@ int spi_flash_setup(void) {
   // the flash may have been set to sleep prior to reaching this point. Make sure it's alive
   spi_flash_cmd(SPI_FLASH_CMD_WAKE);
 
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 9 passed \n");
+  }
+
   // set WEL
   spi_flash_cmd(SPI_FLASH_CMD_WRITE_ENABLE);
   if ((spi_flash_read_status() & (1 << FLASH_SREG_WEL)) == 0) { // fail if WEL is cleared
     return -1;
   }
 
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 10 passed \n");
+  }
+
   // clear WEL
   spi_flash_cmd(SPI_FLASH_CMD_WRITE_DISABLE);
   if ((spi_flash_read_status() & (1 << FLASH_SREG_WEL)) != 0) { // fail if WEL is set
     return -1;
+  }
+
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 11 passed \n");
   }
 
   return 0;

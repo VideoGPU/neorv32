@@ -30,9 +30,17 @@ int __attribute__((naked)) main(void) {
   // hardware setup
   system_setup();
 
+  if (neorv32_spi_available()) {
+	  uart_puts("Pt 1 passed \n");
+  }
+
   // intro screen
   uart_puts("\n\n\n"THEME_INTRO"\n"
             "build: " __DATE__ "\n\n");
+
+  if (neorv32_spi_available()) {
+	  uart_puts("Pt 2 passed \n");
+  }
 
   // ------------------------------------------------
   // Auto boot sequence
@@ -46,6 +54,10 @@ int __attribute__((naked)) main(void) {
     uart_puts(" in "xstr(AUTO_BOOT_TIMEOUT)"s. Press any key to abort.\n");
     uint64_t timeout_time = neorv32_clint_time_get() + (uint64_t)(AUTO_BOOT_TIMEOUT * NEORV32_SYSINFO->CLK);
     while (1) {
+
+	  if (neorv32_spi_available()) {
+		  uart_puts("Pt 3 passed \n");
+	  }
 
       // wait for user input via UART0
       if (neorv32_uart0_available()) {
@@ -72,6 +84,10 @@ int __attribute__((naked)) main(void) {
 
   // try booting from SPI flash
 #if (SPI_FLASH_EN == 1)
+  if (neorv32_spi_available()) {
+	  uart_puts("\n Pt 4 passed \n");
+  }
+
   uart_putc('\n');
   uart_puts("Loading from SPI flash @"xstr(SPI_FLASH_BASE_ADDR)"... ");
   if (system_exe_load(spi_flash_setup, spi_flash_stream_get) == 0) { system_boot_app(); }
