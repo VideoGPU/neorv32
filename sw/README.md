@@ -18,6 +18,15 @@ linker script and processor start-up code.
 
 Several example/demo programs for testing and for getting started.
 
+For external QEMU-based TWD/I2C slave tests that use `sw/example/demo_twd`,
+build the executable with an explicit toolchain prefix if your environment
+does not provide `riscv-none-elf-*` binaries:
+
+```bash
+cd sw/example/demo_twd
+make clean all RISCV_PREFIX=riscv32-unknown-elf-
+```
+
 ### > [`image_gen`](image_gen)
 
 Helper program to generate NEORV32 executables (for upload via bootloader) and VHDL
