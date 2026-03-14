@@ -1,10 +1,13 @@
 .SUFFIXES:
 .DEFAULT_GOAL := help
 
-TOPTARGETS := elf exe clean clean_all check info all
+TOPTARGETS := exe clean_all check info all
 
-SUBDIRS := $(wildcard */.)
+SUBDIRS := $(patsubst %/makefile,%/.,$(wildcard */makefile))
+# ignore dummy folders (starting with '~')
 EXCLDIR := $(wildcard ~*/.)
+# ignore some of the default projects/examples
+EXCLDIR += eclipse/. dhrystone/. performance_tests/. float_corner_test/.
 SUBDIRS := $(filter-out $(EXCLDIR), $(SUBDIRS))
 
 $(TOPTARGETS): $(SUBDIRS)
@@ -20,5 +23,6 @@ help:
 	@echo " help      - show this text"
 	@echo " check     - check toolchain"
 	@echo " info      - show makefile configuration"
-	@echo " all       - create everything from all projects"
+	@echo " exe       - create executables from all projects"
+	@echo " all       - create executables and boot images from all projects"
 	@echo " clean_all - clean up everything"
