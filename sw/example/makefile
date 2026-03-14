@@ -3,7 +3,7 @@
 
 TOPTARGETS := exe clean_all check info all
 
-SUBDIRS := $(wildcard */.)
+SUBDIRS := $(patsubst %/makefile,%/.,$(wildcard */makefile))
 # ignore dummy folders (starting with '~')
 EXCLDIR := $(wildcard ~*/.)
 # ignore some of the default projects/examples
