@@ -23,6 +23,14 @@ IP block:
 source neorv32_vivado_ip.tcl
 ```
 
+The packaged IP is copied to `/mnt/shonot/fpga_projects/common_IPs/neorv32/` so that all
+custom IPs can be found via a single Vivado repository path:
+
+```tcl
+set_property ip_repo_paths /mnt/shonot/fpga_projects/common_IPs [current_project]
+update_ip_catalog -rebuild
+```
+
 This wrapper uses the `xbus2axi4_bridge.vhd` to convert the processor's XBUS protocol into the AXI4 protocol.
 
 > [!TIP]
