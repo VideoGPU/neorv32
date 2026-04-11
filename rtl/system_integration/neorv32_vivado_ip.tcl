@@ -519,6 +519,25 @@ ipx::add_file {https://stnolting.github.io/neorv32/} [ipx::get_file_groups xilin
 
 
 # **************************************************************
+# Supported FPGA families (allow all common families)
+# **************************************************************
+set_property supported_families { \
+  artix7    Production \
+  artix7l   Production \
+  kintex7   Production \
+  kintex7l  Production \
+  virtex7   Production \
+  zynq      Production \
+  spartan7  Production \
+  kintexu   Production \
+  virtexu   Production \
+  zynquplus Production \
+  kintexuplus Production \
+  virtexuplus Production \
+} [ipx::current_core]
+
+
+# **************************************************************
 # Finalize and add to IP repository
 # **************************************************************
 ipx::create_xgui_files [ipx::current_core]
