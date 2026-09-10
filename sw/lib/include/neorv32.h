@@ -72,6 +72,19 @@ extern "C" {
 
 
 /**********************************************************************//**
+ * @name Address Space Map - External Bus Interface (XBUS) Devices
+ *
+ * These are not SoC modules; the addresses have to match the address map of
+ * the AXI/Wishbone interconnect the XBUS port is attached to.
+ **************************************************************************/
+/**@{*/
+#ifndef NEORV32_MIPI_TX_BASE
+#define NEORV32_MIPI_TX_BASE (0x44A00000U) /**< MIPI CSI-2 TX AXI4-Lite IP (MIPI_TX) */
+#endif
+/**@}*/
+
+
+/**********************************************************************//**
  * @name Fast Interrupt Requests (FIRQ) Aliases
  **************************************************************************/
 /**@{*/
@@ -278,6 +291,7 @@ typedef union {
 #include "neorv32_gpio.h"
 #include "neorv32_gptmr.h"
 #include "neorv32_intrinsics.h"
+#include "neorv32_mipi_tx.h"
 #include "neorv32_neoled.h"
 #include "neorv32_onewire.h"
 #include "neorv32_pwm.h"
