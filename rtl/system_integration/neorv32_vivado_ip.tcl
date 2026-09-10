@@ -20,6 +20,7 @@ set script_dir [file dirname $script_path]
 set neorv32_home $script_dir/../..
 set ip_logo $neorv32_home/docs/figures/neorv32_logo_riscv_small.png
 set outputdir $script_dir/neorv32_vivado_ip_work
+set ip_packaged /mnt/shonot/fpga_projects/common_IPs/neorv32
 set ip_top neorv32_vivado_ip
 
 
@@ -529,13 +530,43 @@ ipx::add_file {https://stnolting.github.io/neorv32/} [ipx::get_file_groups xilin
 
 
 # **************************************************************
+# Supported FPGA families (allow all common families)
+# **************************************************************
+set_property supported_families { \
+  artix7    Production \
+  artix7l   Production \
+  kintex7   Production \
+  kintex7l  Production \
+  virtex7   Production \
+  zynq      Production \
+  spartan7  Production \
+  kintexu   Production \
+  virtexu   Production \
+  zynquplus Production \
+  kintexuplus Production \
+  virtexuplus Production \
+} [ipx::current_core]
+
+
+# **************************************************************
 # Finalize and add to IP repository
 # **************************************************************
 ipx::create_xgui_files [ipx::current_core]
 ipx::update_checksums [ipx::current_core]
 ipx::save_core [ipx::current_core]
 
-set_property ip_repo_paths $outputdir/packaged_ip [current_project]
+# Copy packaged IP to common repository
+file mkdir $ip_packaged
+set old_files [glob -nocomplain -directory $ip_packaged *]
+if {[llength $old_files] != 0} {
+  file delete -force {*}$old_files
+}
+foreach f [glob -directory $outputdir/packaged_ip *] {
+  file copy -force $f $ip_packaged
+}
+puts "Packaged IP copied to: $ip_packaged"
+
+set_property ip_repo_paths $ip_packaged [current_project]
 update_ip_catalog
 
 close_project
